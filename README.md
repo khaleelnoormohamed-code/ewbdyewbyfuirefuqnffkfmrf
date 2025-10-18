@@ -1,1 +1,921 @@
-[index4.html](https://github.com/user-attachments/files/22987476/index4.html)
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>THEYOUTHSTORE</title>
+
+  <style>
+    /* Local Blockletter font (place fonts/Blockletter.ttf in project) */
+    @font-face {
+      font-family: 'Blockletter';
+      src: url('fonts/Blockletter.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Bebas Neue';
+      src: url('fonts/BebasNeue-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root{
+      --bg:#f6f6f6;
+      --card:#fff;
+      --muted:#777;
+      --accent:#111;
+      --radius:10px;
+      --gap:14px;
+      --max-width:1100px;
+      --badge-coming: #f5a623;
+      --badge-out: #e04b4b;
+      --badge-available: #2db34a;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.35;
+    }
+
+    /* Header / Nav */
+    .wrap{max-width:var(--max-width); margin:0 auto; padding:20px;}
+    header{
+      background:var(--card);
+      margin-bottom:18px;
+      padding:18px 20px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:0 6px 20px rgba(10,10,10,0.04);
+    }
+    .logo{
+      font-family:'Blockletter', sans-serif;
+      font-size:28px;
+      letter-spacing:1px;
+    }
+    nav a{
+      margin-left:14px;
+      text-decoration:none;
+      font-family:'Bebas Neue', sans-serif;
+      font-size:15px;
+      color:var(--accent);
+      padding:6px 8px;
+      border-radius:6px;
+    }
+    nav a.active, nav a:hover{
+      background:#efefef;
+    }
+
+    /* Hero */
+    .hero{
+      background:linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.9));
+      border-radius:12px;
+      padding:26px;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      margin-bottom:18px;
+      box-shadow:0 6px 16px rgba(10,10,10,0.03);
+    }
+    .hero-left h1{
+      font-family:'Blockletter', sans-serif;
+      margin:0 0 8px 0;
+      font-size:36px;
+    }
+    .hero-left p{margin:0; color:var(--muted);}
+
+    .hero-right{
+      margin-left:auto;
+      text-align:right;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    /* Categories */
+    .controls{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+    .chip{
+      background:var(--card);
+      border-radius:999px;
+      padding:8px 12px;
+      font-family:'Bebas Neue', sans-serif;
+      font-size:13px;
+      border:1px solid #eee;
+      cursor:pointer;
+      transition:transform .12s, box-shadow .12s;
+    }
+    .chip:hover{transform:translateY(-3px)}
+    .chip.active{border-color:#ddd; box-shadow:0 6px 18px rgba(0,0,0,0.05);}
+
+    /* Grid */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:var(--gap);
+    }
+
+    .card{
+      background:var(--card);
+      padding:12px;
+      border-radius:12px;
+      box-shadow:0 6px 14px rgba(10,10,10,0.03);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      transition:transform .12s, box-shadow .12s;
+      position:relative;
+    }
+    .card:hover{ transform:translateY(-6px); box-shadow:0 12px 30px rgba(10,10,10,0.06); }
+
+    .imgwrap{
+      width:100%;
+      height:150px;
+      border-radius:8px;
+      overflow:hidden;
+      background:#f2f2f2;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .imgwrap img{width:100%; height:100%; object-fit:cover; display:block;}
+
+    .pname{
+      font-family:'Bebas Neue', sans-serif;
+      font-size:16px;
+      margin:0;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+    .price{font-weight:700; color:var(--accent);}
+
+    /* Badge */
+    .badge{
+      position:absolute;
+      top:12px;
+      left:12px;
+      padding:6px 8px;
+      font-size:12px;
+      font-weight:700;
+      border-radius:8px;
+      color:#fff;
+      text-transform:uppercase;
+      letter-spacing:0.6px;
+    }
+    .badge.coming{ background:var(--badge-coming); }
+    .badge.out{ background:var(--badge-out); }
+    .badge.available{ background:var(--badge-available); }
+
+    /* Flavour swatches */
+    .flavour-selector{margin-top:6px}
+    .flavours{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .flavour-circle{
+      width:30px; height:30px; border-radius:50%;
+      border:2px solid #eee; cursor:pointer; display:inline-block;
+      box-shadow:0 2px 8px rgba(0,0,0,0.04);
+      transition:transform .12s, border-color .12s;
+    }
+    .flavour-circle:hover{transform:scale(1.08)}
+    .flavour-circle.selected{border-color:#111; transform:scale(1.16)}
+    .flavour-label{
+      font-size:13px;
+      font-family:Arial, sans-serif;
+      color:var(--muted);
+      margin-left:8px;
+      text-transform:capitalize;
+      min-width:80px;
+    }
+
+    /* Buttons */
+    .btn{
+      background:#111;
+      color:#fff;
+      border:none;
+      padding:8px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-family:'Bebas Neue', sans-serif;
+      letter-spacing:1px;
+      font-size:14px;
+    }
+    .btn.secondary{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid #eee;
+      font-family:system-ui, -apple-system;
+    }
+    button[disabled], .btn[disabled]{
+      opacity:0.5; cursor:not-allowed; pointer-events:none;
+    }
+
+    /* Cart / Checkout section */
+    #cart-section .cart-items{display:flex; flex-direction:column; gap:12px}
+    .cart-row{
+      background:#fafafa; padding:10px; border-radius:8px; display:flex; align-items:center; gap:12px;
+      justify-content:space-between;
+    }
+    .cart-info{display:flex; gap:10px; align-items:center}
+    .cart-info img{width:64px; height:48px; object-fit:cover; border-radius:6px}
+
+    form input, form textarea{
+      width:100%;
+      padding:10px;
+      border-radius:8px;
+      border:1px solid #eee;
+      font-size:14px;
+    }
+
+    /* footer / contact */
+    footer{margin-top:26px; padding:24px; text-align:center; color:var(--muted); font-size:14px}
+
+    /* Small screens */
+    @media (max-width:720px){
+      .hero{flex-direction:column; align-items:flex-start}
+      header{flex-direction:column; gap:10px; align-items:flex-start}
+      .logo{font-size:24px}
+      .imgwrap{height:180px}
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="wrap" role="banner">
+    <div style="display:flex;align-items:center;gap:18px;">
+      <div class="logo">MY STORE</div>
+      <div style="color:var(--muted); font-size:13px;">Minimalist • Gadgets • Vapes • Accessories</div>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <a href="#" class="nav-link active" data-target="home">Home</a>
+      <a href="#" class="nav-link" data-target="shop">Shop</a>
+      <a href="#" class="nav-link" data-target="cart">Cart (<span id="cart-count">0</span>)</a>
+      <a href="#" class="nav-link" data-target="contact">Contact</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Home Section -->
+    <section id="home-section">
+      <div class="hero">
+        <div class="hero-left">
+          <h1>Modern Lifestyle Store</h1>
+          <p>Curated gadgets, stylish accessories, and crafted vape flavours — minimalist, fresh, local.</p>
+        </div>
+        <div class="hero-right">
+          <div style="font-weight:700">Free pickup • Payment on Arrival</div>
+          <div style="margin-top:8px; color:var(--muted)">Browse our featured items below</div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:10px">
+        <div class="controls" id="category-controls">
+          <!-- chips will be injected -->
+        </div>
+        <div style="min-width:220px; display:flex; gap:8px;">
+          <input id="search-input" type="search" placeholder="Search products..." style="padding:10px; border-radius:10px; border:1px solid #eee; width:100%">
+          <button class="btn secondary" id="view-shop-btn">View All</button>
+        </div>
+      </div>
+
+      <div class="grid" id="product-grid">
+        <!-- product cards injected here -->
+      </div>
+    </section>
+
+    <!-- Shop Section (same content, but separate for nav) -->
+    <section id="shop-section" style="display:none;">
+      <h2 style="font-family:'Blockletter', sans-serif; margin-top:0">Shop</h2>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:10px">
+        <div class="controls" id="category-controls-2"></div>
+        <div style="min-width:220px; display:flex; gap:8px;">
+          <input id="search-input-2" type="search" placeholder="Search products..." style="padding:10px; border-radius:10px; border:1px solid #eee; width:100%">
+        </div>
+      </div>
+
+      <div class="grid" id="product-grid-2"></div>
+    </section>
+
+    <!-- Cart / Checkout -->
+    <section id="cart-section" style="display:none;">
+      <h2 style="font-family:'Blockletter', sans-serif; margin-top:0">Your Cart</h2>
+
+      <div class="cart-items" id="cart-items">
+        <!-- cart items injected -->
+      </div>
+
+      <div style="margin-top:16px; display:grid; grid-template-columns:1fr 360px; gap:16px;">
+        <div>
+          <h3 style="margin:0 0 8px 0">Order notes</h3>
+          <p style="color:var(--muted)">Optional: Add any instructions for delivery/pickup.</p>
+          <textarea id="order-notes" rows="4" placeholder="Notes (optional)"></textarea>
+        </div>
+
+        <aside style="background:var(--card); padding:16px; border-radius:12px; box-shadow:0 6px 12px rgba(0,0,0,0.03);">
+          <h4 style="margin:0 0 10px 0">Checkout (Payment on Arrival)</h4>
+          <form id="checkout-form">
+            <input id="cust-name" type="text" placeholder="Full name" required>
+            <input id="cust-phone" type="tel" placeholder="Phone number" required style="margin-top:8px">
+            <input id="cust-address" type="text" placeholder="Address" required style="margin-top:8px">
+            <!-- removed city/region field as requested -->
+            <div style="margin-top:10px; font-size:14px; color:var(--muted)"><strong>Total:</strong> <span id="cart-total">0 FBU</span></div>
+            <button class="btn" type="submit" style="margin-top:12px; width:100%;">Place Order</button>
+            <div id="order-result" style="margin-top:12px; color:green; font-weight:600"></div>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact-section" style="display:none;">
+      <h2 style="font-family:'Blockletter', sans-serif; margin-top:0">Contact</h2>
+      <div style="display:grid; grid-template-columns:1fr 320px; gap:20px">
+        <div>
+          <p style="color:var(--muted)">Questions? Orders? Reach out and we'll reply as soon as possible.</p>
+          <p><strong>Email:</strong> contact@youthstore.com</p>
+          <p><strong>Phone:</strong> +257 71 00 74 00</p>
+          <p><strong>Location:</strong> Bujumbura, Burundi</p>
+        </div>
+        <div style="background:var(--card); padding:12px; border-radius:10px;">
+          <form id="contact-form">
+            <input id="cname" type="text" placeholder="Name" required>
+            <input id="cemail" type="email" placeholder="Email" required style="margin-top:8px">
+            <textarea id="cmessage" placeholder="Message" rows="6" required style="margin-top:8px"></textarea>
+            <button class="btn" type="submit" style="margin-top:8px; width:100%;">Send</button>
+            <div id="contact-result" style="margin-top:8px; color:green; font-weight:600"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      &copy; <span id="yr"></span> THEYOUTHSTORE — Payment on Arrival • All rights reserved
+    </div>
+  </footer>
+
+  <!-- Product & Cart logic -->
+  <script>
+    // ====== MANUAL CATEGORIES (EDIT HERE) ======
+    // Use lowercase keys for matching; the UI will capitalize the display.
+    const categories = [
+      "all",
+      "vapes",
+      "gadgets",
+      "accessories",
+      "drinkware",
+      "smartphones",
+      "wearables",
+      "audio",
+      "home tech"
+    ];
+
+    // ====== MANUAL PRODUCTS (EDIT ONLY THIS BLOCK) ======
+    // For each product set:
+    // - id: number (unique)
+    // - name: string
+    // - category: must match one of categories (case-insensitive)
+    // - price: number (in FBU)
+    // - image: url (or placeholder)
+    // - status: "available" | "coming-soon" | "out-of-stock"
+    // - flavours: optional array (for vapes) [{name, color}]
+    //
+    // Example: status: "coming-soon" will show badge and disable add button.
+    const products = [
+      // Vapes (original ones kept but normalized)
+      {id:1,name:"Tugboat T12000",category:"vapes",price:120000,image:"https://vaporworldbd.com/wp-content/uploads/2024/02/purple-rain-1.png", status:"available", flavours:[
+        {name:"Guava Blue Razz", color:"#d78ae9"},
+        {name:"Blackcurrant Lychee", color:"#946a9e"},
+        {name:"Blueberry Ice", color:"#98d3f9"},
+      ]},
+      {id:2,name:"Elfbar BC10000",category:"vapes",price:140000,image:"https://www.vapesstores.ph/wp-content/uploads/2023/12/red_berry_cherry.jpg", status:"available", flavours:[
+        {name:"Miami Mint", color:"#66d9a6"},
+        {name:"Blueberry Mint", color:"#b1fffc"},
+        {name:"Blueberry Raspberry", color:"#7701fb"},
+        {name:"Red Berry Cherry", color:"#f99292"}
+      ]},
+      {id:3,name:"Lost Mary BM15000",category:"vapes",price:160000,image:"https://elfbar.ae/cdn/shop/files/ColaIce_86f9a412-0443-4ae5-858d-ce7fe21c860f_700x700.jpg?v=1756794839", status:"available", flavours:[
+        {name:"Miami Mint", color:"#66d9a6"},
+        {name:"Grape Ice", color:"#af88b8"},
+        {name:"Blueberry Ice", color:"#7701fb"},
+        {name:"Lychee Funta", color:"#e4e2b8"},
+        {name:"Watermelon Ice", color:"#f99292"}
+      ]},
+      {id:4,name:"Vozol Vista 20000",category:"vapes",price:180000,image:"https://www.vapejunction.co.za/cdn/shop/files/Vista_Peach_Mango_Watermelon_79de47d1-b922-45aa-b7f2-1f17458224c7.png?v=1721990612&width=1080", status:"available", flavours:[
+        {name:"Miami Mint", color:"#66d9a6"},
+        {name:"Cherry Cola", color:"#ffc600"},
+        {name:"Elderflower Grapefruit", color:"#f8f183"},
+        {name:"Raspberry Watermelon", color:"#ff8467"},
+        {name:"Watermelon Ice", color:"#ff3000"},
+        {name:"Grape Ice", color:"#af88b8"}
+      ]},
+      {id:5,name:"Elfbar Ice King 30000",category:"vapes",price:220000,image:"https://disposableking.co.za/image/cache/catalog/Elf%20Bar/Ice%20King%2025000%20Puffs/Miami%20Mint-228x228.jpg", status:"coming-soon", flavours:[
+        {name:"Miami Mint", color:"#66d9a6"},
+        {name:"Blueberry Ice", color:"#7701fb"},
+        {name:"Grape Ice", color:"#af88b8"},
+        {name:"Cherry Pomegranate Cranberry", color:"#ff8467"},
+        {name:"Kiwi Passion Fruit Guava", color:"#50f460"}
+      ]},
+      {id:6,name:"Lost Mary MT35000",category:"vapes",price:240000,image:"https://risingwholesale.com/cdn/shop/files/LOST-M_2_544782b6-6d9c-428a-9c02-855d86efbc7b.webp?v=1748015616", status:"out-of-stock", flavours:[
+        {name:"Miami Mint", color:"#66d9a6"},
+        {name:"Black Grape", color:"#af88b8"},
+        {name:"Peach Green Grape", color:"#abd46e"},
+        {name:"Watermelon Ice", color:"#ff3000"},
+        {name:"Kiwi Passion Fruit Guava", color:"#50f460"}
+      ]},
+
+      // Gadgets
+      {id:7,name:"JBL Flip 6",category:"gadgets",price:950000,image:"https://images-cdn.ubuy.co.in/647d4196587a2715b647e13e-jbl-flip-6-bluetooth-portable-speaker.jpg", status:"available"},
+      {id:8,name:"JBL Clip 4",category:"gadgets",price:700000,image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7yMPk8L5g-yXMCfbb5F2_gEJotzs2f0bbcQ&s", status:"available"},
+      {id:9,name:"JBL Go 4",category:"gadgets",price:550000,image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBXYrCYPLy_lc_hXtlmAOXy3x4Lv2uKx9iPA&s", status:"available"},
+      {id:10,name:"PlayStation 5",category:"gadgets",price:5000000,image:"https://m.media-amazon.com/images/I/51fM0CKG+HL.jpg_BO30,255,255,255_UF900,850_SR1910,1000,0,C_QL100_.jpg", status:"coming-soon"},
+
+      // Accessories
+      {id:11,name:"Accessory Z",category:"accessories",price:20000,image:"https://via.placeholder.com/600x400?text=Accessory+Z", status:"available"},
+      {id:12,name:"Accessory Lite",category:"accessories",price:15000,image:"https://via.placeholder.com/600x400?text=Accessory+Lite", status:"available"},
+      {id:13,name:"Accessory Pro",category:"accessories",price:30000,image:"https://via.placeholder.com/600x400?text=Accessory+Pro", status:"out-of-stock"},
+      {id:14,name:"Accessory Go",category:"accessories",price:25000,image:"https://via.placeholder.com/600x400?text=Accessory+Go", status:"available"},
+
+      // Drinkware
+      {id:15,name:"Stanley H2O 40oz",category:"drinkware",price:240000,image:"https://www.trappers.co.za/cdn/shop/files/QuencherShale.webp?v=1752587397", status:"available"},
+      {id:16,name:"Stanley Cup 20oz",category:"drinkware",price:28000,image:"https://via.placeholder.com/600x400?text=Stanley+20oz", status:"available"},
+
+      // Smartphones
+      {id:17,name:"Smartphone X Pro",category:"smartphones",price:1800000,image:"https://via.placeholder.com/600x400?text=Smartphone+X+Pro", status:"coming-soon"},
+      {id:18,name:"Galaxy Z Fold",category:"smartphones",price:4200000,image:"https://via.placeholder.com/600x400?text=Galaxy+Z+Fold", status:"available"},
+      {id:19,name:"Budget Phone A1",category:"smartphones",price:220000,image:"https://via.placeholder.com/600x400?text=Budget+Phone+A1", status:"available"},
+
+      // Wearables
+      {id:20,name:"Galaxy Watch 6",category:"wearables",price:950000,image:"https://via.placeholder.com/600x400?text=Galaxy+Watch+6", status:"out-of-stock"},
+      {id:21,name:"FitBand Lite",category:"wearables",price:120000,image:"https://via.placeholder.com/600x400?text=FitBand+Lite", status:"available"},
+      {id:22,name:"Smart Ring Pro",category:"wearables",price:350000,image:"https://via.placeholder.com/600x400?text=Smart+Ring+Pro", status:"coming-soon"},
+
+      // Audio
+      {id:23,name:"Wireless Earbuds Pro",category:"audio",price:250000,image:"https://via.placeholder.com/600x400?text=Earbuds+Pro", status:"available"},
+      {id:24,name:"Over-Ear Studio Headphones",category:"audio",price:520000,image:"https://via.placeholder.com/600x400?text=Studio+Headphones", status:"available"},
+      {id:25,name:"Portable Bluetooth Speaker",category:"audio",price:180000,image:"https://via.placeholder.com/600x400?text=Portable+Speaker", status:"available"},
+
+      // Home Tech
+      {id:26,name:"Smart Bulb Kit",category:"home tech",price:80000,image:"https://via.placeholder.com/600x400?text=Smart+Bulb+Kit", status:"available"},
+      {id:27,name:"WiFi Security Cam",category:"home tech",price:360000,image:"https://via.placeholder.com/600x400?text=WiFi+Cam", status:"coming-soon"},
+      {id:28,name:"Mini Air Purifier",category:"home tech",price:150000,image:"https://via.placeholder.com/600x400?text=Air+Purifier", status:"available"},
+
+      // Extra accessories & gadgets to expand to 30+
+      {id:29,name:"USB-C Multi Hub",category:"accessories",price:40000,image:"https://via.placeholder.com/600x400?text=USB-C+Hub", status:"available"},
+      {id:30,name:"Powerbank 20k",category:"gadgets",price:90000,image:"https://via.placeholder.com/600x400?text=Powerbank+20k", status:"available"},
+      {id:31,name:"Car Charger Duo",category:"accessories",price:15000,image:"https://via.placeholder.com/600x400?text=Car+Charger", status:"available"},
+      {id:32,name:"Noise Cancelling Earbuds",category:"audio",price:320000,image:"https://via.placeholder.com/600x400?text=Noise+Earbuds", status:"out-of-stock"}
+    ];
+    // ====== END MANUAL PRODUCTS ======
+
+    // --- App State ---
+    let cart = JSON.parse(localStorage.getItem('cart')||'[]'); // array of {id,qty,flavour (string|null)}
+    let activeCategory = "all";
+
+    // --- Utility ---
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+    // Price formatter: "160.000 FBU"
+    const priceFormatter = new Intl.NumberFormat('de-DE'); // uses dot as thousands separator
+    function formatPrice(num){
+      if(typeof num !== 'number') num = Number(num) || 0;
+      return priceFormatter.format(Math.round(num)) + ' FBU';
+    }
+
+    // --- DOM Elements ---
+    const productGrid = $('#product-grid');
+    const productGrid2 = $('#product-grid-2');
+    const catControls = $('#category-controls');
+    const catControls2 = $('#category-controls-2');
+    const search = $('#search-input');
+    const search2 = $('#search-input-2');
+    const cartCountEl = $('#cart-count');
+    const cartItemsEl = $('#cart-items');
+    const totalEl = $('#cart-total');
+    const yr = document.getElementById('yr');
+    yr.textContent = new Date().getFullYear();
+
+    // --- Navigation ---
+    $$('.nav-link').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        const target = a.getAttribute('data-target');
+        showSection(target);
+        $$('.nav-link').forEach(n=>n.classList.remove('active'));
+        a.classList.add('active');
+      });
+    });
+
+    $('#view-shop-btn').addEventListener('click', ()=> {
+      showSection('shop');
+      $$('.nav-link').forEach(n=>n.classList.remove('active'));
+      $$('.nav-link').find?.(n=>n.getAttribute('data-target')==='shop')?.classList.add('active');
+    });
+
+    function showSection(name){
+      $('#home-section').style.display = name==='home'?'' : 'none';
+      $('#shop-section').style.display = name==='shop'?'' : 'none';
+      $('#cart-section').style.display = name==='cart'?'' : 'none';
+      $('#contact-section').style.display = name==='contact'?'' : 'none';
+    }
+
+    // --- Render category chips ---
+    function renderCategoryChips(){
+      const makeChip = (cat, container)=>{
+        const el = document.createElement('button');
+        el.className = 'chip' + (cat===activeCategory ? ' active' : '');
+        // display label: capitalize words
+        const display = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        el.textContent = display;
+        el.addEventListener('click', ()=> {
+          activeCategory = cat;
+          updateGrids();
+          $$(`.chip`).forEach(c=>c.classList.remove('active'));
+          el.classList.add('active');
+        });
+        container.appendChild(el);
+      };
+      catControls.innerHTML = '';
+      catControls2.innerHTML = '';
+      categories.forEach(c=> makeChip(c, catControls));
+      categories.forEach(c=> makeChip(c, catControls2));
+    }
+
+    // --- Render products into a grid container ---
+    function renderProducts(container, list){
+      container.innerHTML = '';
+      list.forEach(p=>{
+        const status = (p.status || 'available').toLowerCase();
+        const isAvailable = status === 'available';
+        const isComing = status === 'coming-soon';
+        const isOut = status === 'out-of-stock';
+
+        const card = document.createElement('article');
+        card.className = 'card';
+        // Add badge html depending on status
+        let badgeHTML = '';
+        if(isComing) badgeHTML = `<div class="badge coming">Coming Soon</div>`;
+        else if(isOut) badgeHTML = `<div class="badge out">Out of Stock</div>`;
+        else badgeHTML = `<div class="badge available">Available</div>`;
+
+        card.innerHTML = `
+          ${badgeHTML}
+          <div class="imgwrap"><img src="${p.image}" alt="${p.name}"></div>
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+              <h3 class="pname">${p.name}</h3>
+              <div class="price">${formatPrice(p.price)}</div>
+            </div>
+            <div style="color:var(--muted); font-size:13px">${p.category}</div>
+          </div>
+
+          <div class="flavour-selector" ${p.category!=='vapes' ? 'style="display:none"' : ''} data-pid="${p.id}">
+            <div style="display:flex; align-items:center; margin-top:8px">
+              <div class="flavours" data-pid="${p.id}"></div>
+              <div class="flavour-label" id="flavour-label-${p.id}"></div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn" data-add="${p.id}" ${!isAvailable ? 'disabled' : ''}>${isAvailable ? 'Add to Cart' : (isComing ? 'Coming Soon' : 'Out of Stock')}</button>
+            <button class="btn secondary" data-view="${p.id}">View</button>
+          </div>
+        `;
+        // visually dim card if not available
+        if(!isAvailable) card.style.opacity = '0.85';
+
+        container.appendChild(card);
+
+        // If vape -> inject flavour circles
+        if((p.category === 'vapes' || p.category === 'Vapes') && p.flavours){
+          const swatchWrap = card.querySelector(`.flavours[data-pid="${p.id}"]`);
+          p.flavours.forEach((f,idx)=>{
+            const sw = document.createElement('span');
+            sw.className = 'flavour-circle';
+            sw.style.background = f.color;
+            sw.setAttribute('data-flavour', f.name);
+            sw.setAttribute('data-pid', p.id);
+            // default select first
+            if(idx===0) sw.classList.add('selected');
+            swatchWrap.appendChild(sw);
+            // set initial label
+            const labelEl = document.getElementById(`flavour-label-${p.id}`);
+            if(labelEl) labelEl.textContent = p.flavours[0].name;
+          });
+        }
+      });
+
+      // Attach flavour circle handlers & buttons
+      container.querySelectorAll('.flavour-circle').forEach(el=>{
+        el.addEventListener('click', (e)=>{
+          const pid = el.getAttribute('data-pid');
+          const parentWrap = document.querySelector(`.flavours[data-pid="${pid}"]`);
+          parentWrap.querySelectorAll('.flavour-circle').forEach(c=>c.classList.remove('selected'));
+          el.classList.add('selected');
+          const name = el.getAttribute('data-flavour');
+          const label = document.getElementById(`flavour-label-${pid}`);
+          if(label) label.textContent = name;
+        });
+      });
+
+      container.querySelectorAll('button[data-add]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const id = parseInt(btn.getAttribute('data-add'));
+          addToCart(id);
+        });
+      });
+
+      container.querySelectorAll('button[data-view]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const id = parseInt(btn.getAttribute('data-view'));
+          openProductDetail(id);
+        });
+      });
+    }
+
+    // --- Update both grids based on category & search ---
+    function updateGrids(){
+      const q = (search.value||'').toLowerCase();
+      const q2 = (search2.value||'').toLowerCase();
+
+      // filtering uses lowercase comparison for categories
+      const filtered1 = products.filter(p => ((activeCategory==='all') || (String(p.category||'').toLowerCase()===activeCategory)) && p.name.toLowerCase().includes(q));
+      const filtered2 = products.filter(p => ((activeCategory==='all') || (String(p.category||'').toLowerCase()===activeCategory)) && p.name.toLowerCase().includes(q2));
+
+      renderProducts(productGrid, filtered1.slice(0,16)); // home: show up to 16
+      renderProducts(productGrid2, filtered2); // shop: all matching
+    }
+
+    search.addEventListener('input', updateGrids);
+    search2.addEventListener('input', updateGrids);
+
+    // --- Cart operations ---
+    function saveCart(){ localStorage.setItem('cart', JSON.stringify(cart)); updateCartUI(); }
+
+    function updateCartUI(){
+      // update count
+      const count = cart.reduce((acc,i)=>acc + i.qty, 0);
+      cartCountEl.textContent = count;
+      // render cart items
+      cartItemsEl.innerHTML = '';
+      if(cart.length===0){
+        cartItemsEl.innerHTML = '<div style="color:var(--muted)">Your cart is empty.</div>';
+        totalEl.textContent = '0 FBU';
+        return;
+      }
+      let total = 0;
+      cart.forEach((it, index)=>{
+        const prod = products.find(p=>p.id===it.id) || {};
+        total += (prod.price || 0) * it.qty;
+        const row = document.createElement('div');
+        row.className = 'cart-row';
+        row.innerHTML = `
+          <div class="cart-info">
+            <img src="${prod.image||'https://via.placeholder.com/120'}" alt="${prod.name}">
+            <div>
+              <div style="font-weight:700">${prod.name} ${it.flavour ? '('+it.flavour+')' : ''}</div>
+              <div style="color:var(--muted); font-size:13px">${prod.category} • ${formatPrice(prod.price)} x ${it.qty}</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center">
+            <button class="btn secondary" data-dec="${index}">-</button>
+            <div style="min-width:28px; text-align:center">${it.qty}</div>
+            <button class="btn secondary" data-inc="${index}">+</button>
+            <button class="btn secondary" style="margin-left:8px" data-rem="${index}">Remove</button>
+          </div>
+        `;
+        cartItemsEl.appendChild(row);
+      });
+      totalEl.textContent = formatPrice(total);
+
+      // attach inc/dec handlers
+      cartItemsEl.querySelectorAll('[data-inc]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const i = parseInt(b.getAttribute('data-inc'));
+          cart[i].qty++;
+          saveCart();
+        });
+      });
+      cartItemsEl.querySelectorAll('[data-dec]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const i = parseInt(b.getAttribute('data-dec'));
+          cart[i].qty = Math.max(1, cart[i].qty-1);
+          saveCart();
+        });
+      });
+      cartItemsEl.querySelectorAll('[data-rem]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const i = parseInt(b.getAttribute('data-rem'));
+          cart.splice(i,1);
+          saveCart();
+        });
+      });
+    }
+
+    function addToCart(id){
+      const prod = products.find(p=>p.id===id);
+      if(!prod) return alert('Product not found');
+      const status = (prod.status||'available').toLowerCase();
+      if(status !== 'available'){
+        if(status === 'coming-soon') return alert('This item is coming soon — you cannot add it to cart yet.');
+        if(status === 'out-of-stock') return alert('This item is out of stock.');
+        return;
+      }
+
+      let chosenFlavour = null;
+      if(String(prod.category||'').toLowerCase() === 'vapes'){
+        const sel = document.querySelector(`.flavours[data-pid="${id}"] .flavour-circle.selected`);
+        chosenFlavour = sel ? sel.getAttribute('data-flavour') : (prod.flavours && prod.flavours[0] && prod.flavours[0].name) || null;
+      }
+      // Check existing with same flavour
+      const existingIndex = cart.findIndex(c => c.id===id && (c.flavour||'') === (chosenFlavour||''));
+      if(existingIndex > -1){
+        cart[existingIndex].qty += 1;
+      } else {
+        cart.push({id:id, qty:1, flavour: chosenFlavour});
+      }
+      saveCart();
+      alert(`Added ${prod.name}${chosenFlavour ? ' ('+chosenFlavour+')' : ''} to cart`);
+    }
+
+    // --- Product detail modal (simple overlay) ---
+    function openProductDetail(id){
+      const p = products.find(x=>x.id===id);
+      if(!p) return;
+      const status = (p.status||'available').toLowerCase();
+      const isAvailable = status === 'available';
+      // simple modal using window.open-like overlay
+      const modal = document.createElement('div');
+      modal.style.position='fixed';
+      modal.style.inset=0; modal.style.background='rgba(0,0,0,0.5)';
+      modal.style.display='flex'; modal.style.alignItems='center'; modal.style.justifyContent='center';
+      modal.style.zIndex=9999;
+      modal.innerHTML = `
+        <div style="width:92%; max-width:720px; background:var(--card); border-radius:12px; padding:18px; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+          <div style="display:flex; gap:12px; align-items:flex-start">
+            <div style="flex:1 1 320px;">
+              <div style="width:100%; height:300px; border-radius:8px; overflow:hidden; background:#f2f2f2">
+                <img src="${p.image}" alt="${p.name}" style="width:100%; height:100%; object-fit:cover">
+              </div>
+            </div>
+            <div style="flex:1 1 260px;">
+              <h2 style="margin:0 0 8px 0; font-family:'Bebas Neue', sans-serif">${p.name}</h2>
+              <div style="font-weight:700; margin-bottom:8px">${formatPrice(p.price)}</div>
+              <div style="color:var(--muted); margin-bottom:12px">${p.category}</div>
+
+              <div ${p.category!=='vapes' ? 'style="display:none"' : ''}>
+                <div style="font-size:13px; color:var(--muted); margin-bottom:8px">Choose flavour</div>
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px">
+                  ${ (p.flavours||[]).map((f, i) => `<span class="flavour-circle" data-flavour="${f.name}" data-color="${f.color}" style="background:${f.color}; ${i===0 ? 'border-color:#111; transform:scale(1.12)' : ''}"></span>`).join('') }
+                  <div id="detail-flavour-name" style="margin-left:8px; font-size:13px; color:var(--muted)">${(p.flavours&&p.flavours[0]&&p.flavours[0].name)||''}</div>
+                </div>
+              </div>
+
+              <div style="display:flex; gap:8px;">
+                <button class="btn" id="detail-add" ${!isAvailable ? 'disabled' : ''}>${isAvailable ? 'Add to Cart' : (status==='coming-soon' ? 'Coming Soon' : 'Out of Stock')}</button>
+                <button class="btn secondary" id="detail-close">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      // wire up flavour circles inside modal
+      modal.querySelectorAll('.flavour-circle').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          modal.querySelectorAll('.flavour-circle').forEach(x=>{ x.style.borderColor = '#eee'; x.style.transform = ''; });
+          el.style.borderColor = '#111'; el.style.transform = 'scale(1.12)';
+          modal.querySelector('#detail-flavour-name').textContent = el.getAttribute('data-flavour');
+        });
+      });
+
+      modal.querySelector('#detail-add').addEventListener('click', ()=>{
+        if(!isAvailable){ alert('This item cannot be added to cart.'); return; }
+        let chosenFlavour = null;
+        const fsel = modal.querySelector('.flavour-circle[style*="border-color: rgb(17, 17, 17)"], .flavour-circle[style*="border-color:#111"]');
+        if(fsel) chosenFlavour = fsel.getAttribute('data-flavour');
+        // fallback to first
+        if(p.category==='vapes' && !chosenFlavour && p.flavours && p.flavours[0]) chosenFlavour = p.flavours[0].name;
+        // same add logic
+        const existingIndex = cart.findIndex(c => c.id===p.id && (c.flavour||'') === (chosenFlavour||''));
+        if(existingIndex > -1) cart[existingIndex].qty++;
+        else cart.push({id:p.id, qty:1, flavour: chosenFlavour});
+        saveCart();
+        alert('Added to cart');
+        modal.remove();
+      });
+
+      modal.querySelector('#detail-close').addEventListener('click', ()=> modal.remove());
+      modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
+    }
+
+    // --- Checkout submit ---
+    $('#checkout-form').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      if(cart.length===0){ alert('Cart is empty'); return; }
+      const name = $('#cust-name').value.trim();
+      const phone = $('#cust-phone').value.trim();
+      const address = $('#cust-address').value.trim();
+      if(!name||!phone||!address) { alert('Please fill all fields'); return; }
+
+      // Build order summary
+      const order = {
+        customer:{name, phone, address},
+        notes: $('#order-notes').value || '',
+        items: cart.map(it => {
+          const p = products.find(x=>x.id===it.id) || {};
+          return {id:it.id, name:p.name, flavour:it.flavour, qty:it.qty, price: p.price, priceFormatted: formatPrice(p.price)};
+        }),
+        total: cart.reduce((sum,it)=> sum + ( (products.find(p=>p.id===it.id)?.price||0) * it.qty ), 0),
+        totalFormatted: formatPrice(cart.reduce((sum,it)=> sum + ( (products.find(p=>p.id===it.id)?.price||0) * it.qty ), 0)),
+        time: new Date().toISOString()
+      };
+
+      // For now we just show a confirmation and clear cart.
+      $('#order-result').textContent = 'Order placed! We will contact you to confirm.';
+
+      // (Optional) log order to console for merchant to capture (or later send to backend)
+      console.log('NEW ORDER (Payment on Arrival):', order);
+
+      // Clear
+      cart = [];
+      saveCart();
+      $('#checkout-form').reset();
+      // Keep small success visible then clear text after short time
+      setTimeout(()=> $('#order-result').textContent = '', 8000);
+    });
+
+    // --- Contact form ---
+    $('#contact-form').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      $('#contact-result').textContent = 'Message sent! We will reply soon.';
+      console.log('Contact message:', {
+        name:$('#cname').value, email:$('#cemail').value, message:$('#cmessage').value
+      });
+      $('#contact-form').reset();
+      setTimeout(()=> $('#contact-result').textContent='', 5000);
+    });
+
+    // --- Init ---
+    (function init(){
+      renderCategoryChips();
+      updateGrids();
+      updateCartUI();
+      showSection('home');
+    })();
+
+    // expose showSection for console convenience
+    window.showSection = showSection;
+
+  </script>
+<!-- ===== WHATSAPP FLOATING BUTTON ===== -->
+<a href="https://wa.me/message/3XEFCFKCQ5U6C1"
+   target="_blank"
+   id="whatsapp-float"
+   aria-label="Chat on WhatsApp">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+       alt="WhatsApp"
+       style="width:36px;height:36px;">
+</a>
+
+<style>
+  #whatsapp-float {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    background: #25D366;
+    border-radius: 50%;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 9999;
+    transition: transform .15s, box-shadow .15s;
+  }
+  #whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  }
+  @media (max-width:600px){
+    #whatsapp-float{bottom:16px;right:16px;padding:10px;}
+  }
+</style>
+<!-- ===== END WHATSAPP FLOATING BUTTON ===== -->
+
+</body>
+</html>
+
